@@ -1,0 +1,4 @@
+[submodule "pgfplots"]
+	path = pgfplots
+	url = https://github.com/LogCreative/pgfplots.git
+	branch = docs-extract
