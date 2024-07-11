@@ -2,3 +2,6 @@
 	path = pgfplots
 	url = https://github.com/LogCreative/pgfplots.git
 	branch = docs-extract
+[submodule "PGFPlotsEdt"]
+	path = PGFPlotsEdt
+	url = https://github.com/LogCreative/PGFPlotsEdt.git
