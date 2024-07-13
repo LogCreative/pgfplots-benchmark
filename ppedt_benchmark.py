@@ -9,14 +9,18 @@ import utils
 
 dataset_name = "latex_pgfplots_doctest"
 compiler = "pdflatex"
+deploy = True
 
 texinputs = os.environ.get("TEXINPUTS")
 paths = os.environ.get("PATH")
 
-# run python server.py in the background and continue running
-server_id = subprocess.Popen(f"{sys.executable} ppedt_server.py", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd="PGFPlotsEdt", shell=True, env={"PATH": paths})
-# server_id = subprocess.Popen(f"{sys.executable} gunicorn-deploy.py", stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd="PGFPlotsEdt/deploy", shell=True, 
-#                              env={"TEXINPUTS": f"{texinputs}:../../{dataset_name}:", "PATH": paths})
+if not deploy:
+    # run python server.py in the background and continue running
+    server_id = subprocess.Popen(f"{sys.executable} ppedt_server.py", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd="PGFPlotsEdt", shell=True, env={"PATH": paths})
+else:
+    import docker
+    client = docker.from_env()
+    container = client.containers.run("LogCreative/PGFPlotsEdt", detech=True, ports={'5678/tcp': 5678})
 
 # wait for the server to start
 time.sleep(5)
@@ -40,11 +44,13 @@ session = requests.Session()
 total_time = 0
 success_time = 0
 
-with open("ppedt_times.csv", "w") as bf:
+result_file = "ppedt_times.csv" if not deploy else "ppedt_deploy_times.csv"
+
+with open(result_file, "w") as bf:
     bf.write(f"file,time,reason\n")
 
 def write_result(line):
-    with open("ppedt_times.csv", "a") as bf:
+    with open(result_file, "a") as bf:
         bf.write(f"{line}\n")
 
 with tqdm.tqdm(dataset_files, leave=True) as pbar:
@@ -81,8 +87,11 @@ with tqdm.tqdm(dataset_files, leave=True) as pbar:
 # close the session
 session.close()
 
-# Kill the server process
-server_id.kill()
+if not deploy:
+    # Kill the server process
+    server_id.kill()
+else:
+    container.stop()
 
 # Print the result
 print(f"**** PGFPlotsEdt benchmark ****")

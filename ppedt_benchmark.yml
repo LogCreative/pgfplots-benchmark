@@ -6,3 +6,4 @@ dependencies:
     - requests
     - gunicorn
     - tqdm
+    - docker
