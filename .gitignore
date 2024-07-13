@@ -301,3 +301,4 @@ TSWLatexianTemp*
 #*Notes.bib
 
 latex_pgfplots_doctest/
+__pycache__/
