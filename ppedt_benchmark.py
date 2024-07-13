@@ -18,9 +18,10 @@ if not deploy:
     # run python server.py in the background and continue running
     server_id = subprocess.Popen(f"{sys.executable} ppedt_server.py", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd="PGFPlotsEdt", shell=True, env={"PATH": paths})
 else:
+    # To activate non-root previlage: https://docs.docker.com/engine/install/linux-postinstall/
     import docker
     client = docker.from_env()
-    container = client.containers.run("LogCreative/PGFPlotsEdt", detech=True, ports={'5678/tcp': 5678})
+    container = client.containers.run("logcreative/pgfplotsedt:master", detach=True, ports={'5678/tcp': 5678})
 
 # wait for the server to start
 time.sleep(5)
@@ -108,3 +109,16 @@ else:
 # Total time: 8.199213667710621 min
 # Avg time: 0.6757593682179084 s for all 728 examples
 # Avg time (successful): 0.686266279220581 s for all 660 successful examples, success rate: 0.9065934065934066
+
+
+# Test on Ubuntu
+
+# **** PGFPlotsEdt benchmark ****
+# Total time: 9.751622597376505 min
+# Avg time: 0.8037051591244373 s for all 728 examples
+# Avg time (successful): 0.8098233898480733 s for all 660 successful examples, success rate: 0.9065934065934066
+
+# **** PGFPlotsEdt Deploy benchmark ****
+# Total time: 8.13580854733785 min
+# Avg time: 0.6705336714838888 s for all 728 examples
+# Avg time (successful): 0.6968651327975961 s for all 645 successful examples, success rate: 0.885989010989011
