@@ -6,12 +6,17 @@ import os
 import tqdm
 import sys
 import utils
+import argparse
+
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--compiler", type=str, choices=["pdflatex","xelatex"], default="pdflatex")
+argparser.add_argument("--deploy", action="store_true")
+args = argparser.parse_args()
 
 dataset_name = "latex_pgfplots_doctest"
-compiler = "pdflatex"
-deploy = True
+compiler = args.compiler
+deploy = args.deploy
 
-texinputs = os.environ.get("TEXINPUTS")
 paths = os.environ.get("PATH")
 
 if not deploy:
@@ -95,7 +100,7 @@ else:
     container.stop()
 
 # Print the result
-print(f"**** PGFPlotsEdt benchmark ****")
+print(f"**** PGFPlotsEdt" + " Deploy" if deploy else "" + " benchmark ****")
 print(f"Total time: {total_time/60} min")
 print(f"Avg time: {total_time/dataset_size} s for all {dataset_size} examples")
 if success_size > 0:
