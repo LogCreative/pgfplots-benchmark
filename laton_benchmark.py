@@ -25,7 +25,7 @@ server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subproce
 # Please build the image first.
 print("Start LaTeX Online ...")
 client = docker.from_env()
-container = client.containers.run("aslushnikov/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
+container = client.containers.run("logcreative/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
 # docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d aslushnikov/latex-online:latest
 
 # Wait for the server to start, git clone may slow for LaTeX Online
