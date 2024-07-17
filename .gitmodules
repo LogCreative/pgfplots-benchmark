@@ -5,3 +5,7 @@
 [submodule "PGFPlotsEdt"]
 	path = PGFPlotsEdt
 	url = https://github.com/LogCreative/PGFPlotsEdt.git
+[submodule "latex-online"]
+	path = latex-online
+	url = https://github.com/LogCreative/latex-online.git
+	branch = 2024

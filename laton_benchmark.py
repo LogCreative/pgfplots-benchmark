@@ -18,15 +18,21 @@ args = argparser.parse_args()
 dataset_name = "latex_pgfplots_doctest"
 
 # Start the file server to feed the LaTeX Online
-server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
+print("Start file server ...")
+server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
 # Start LaTeX Online from docker
+# Please build the image first.
+print("Start LaTeX Online ...")
 client = docker.from_env()
-container = client.containers.run("aslushnikov/latex-online", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
+container = client.containers.run("aslushnikov/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
+# docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d aslushnikov/latex-online:latest
 
-# Wait for the server to start
-time.sleep(5)
+# Wait for the server to start, git clone may slow for LaTeX Online
+print("Wait for the server to start (30s) ...")
+time.sleep(30)
 
+print("Benchmark started ...")
 dataset_files = utils.getDataset(dataset_name)
 dataset_size = len(dataset_files)
 success_size = 0
