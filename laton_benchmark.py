@@ -56,12 +56,19 @@ def write_result(line):
 with tqdm.tqdm(dataset_files, leave=True) as pbar:
     for file in pbar:
         start = time.time()
-        response = session.get(f"http://127.0.0.1:2700/compile?url=http://host.docker.internal:3000/{dataset_name}/{file}&compiler={args.compiler}")
+        try:
+            response = session.get(f"http://127.0.0.1:2700/compile?url=http://host.docker.internal:3000/{dataset_name}/{file}&compiler={args.compiler}")
+        except Exception as e:
+            print(f"Error: {e}")
+            write_result(f"{file},NaN")
+            total_time += time.time() - start
+            pbar.set_description(f"{file} FAILED")
+            continue
         end = time.time()
         elapsed_time = end - start
         total_time += elapsed_time
         if response.headers["Content-Type"] != "application/pdf":
-            if response.headers["Content-Type"] == "text/plain; charset=utf-8":
+            if response.headers["Content-Type"] == "text/plain; charset=utf-8" or response.headers["Content-Type"] == "text/plain; charset=UTF-8":
                 # find blocks of errors with started "! "
                 errors = [line for line in response.text.split("\n") if line.startswith("! ")]
                 if len(errors) > 0:
