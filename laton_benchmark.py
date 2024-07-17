@@ -10,6 +10,9 @@ import requests
 import argparse
 import tqdm
 
+# Please build the image first:
+# cd latex-online docker build -t logcreative/latex-online:latest .
+
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--compiler", type=str, choices=["pdflatex","xelatex"], default="pdflatex")
 args = argparser.parse_args()
@@ -19,14 +22,13 @@ dataset_name = "latex_pgfplots_doctest"
 
 # Start the file server to feed the LaTeX Online
 print("Start file server ...")
-server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 
 # Start LaTeX Online from docker
-# Please build the image first.
 print("Start LaTeX Online ...")
 client = docker.from_env()
 container = client.containers.run("logcreative/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
-# docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d aslushnikov/latex-online:latest
+# docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d logcreative/latex-online:latest
 
 # Wait for the server to start, git clone may slow for LaTeX Online
 print("Wait for the server to start (30s) ...")
@@ -61,7 +63,7 @@ with tqdm.tqdm(dataset_files, leave=True) as pbar:
         except Exception as e:
             print(f"Error: {e}")
             write_result(f"{file},NaN")
-            total_time += time.time() - start
+            total_time += 30 # for fair comparison with PGFPlotsEdt, 30s for timeout
             pbar.set_description(f"{file} FAILED")
             continue
         end = time.time()
@@ -70,7 +72,7 @@ with tqdm.tqdm(dataset_files, leave=True) as pbar:
         if response.headers["Content-Type"] != "application/pdf":
             if response.headers["Content-Type"] == "text/plain; charset=utf-8" or response.headers["Content-Type"] == "text/plain; charset=UTF-8":
                 # find blocks of errors with started "! "
-                errors = [line for line in response.text.split("\n") if line.startswith("! ")]
+                errors = response.text.split("\n")
                 if len(errors) > 0:
                     error = errors[0].replace(",","") # avoid the comma spliter
                     write_result(f"{file},NaN,{error}")
@@ -102,3 +104,8 @@ if success_size > 0:
     print(f"Avg time (successful): {success_time/success_size} s for all {success_size} successful examples, success rate: {success_size/dataset_size}")
 else:
     print(f"! ALL FAILED")
+
+# **** LaTeX Online benchmark ****
+# Total time: 24.5195565144221 min
+# Avg time: 2.020842569869953 s for all 728 examples
+# Avg time (successful): 2.045729412517228 s for all 657 successful examples, success rate: 0.9024725274725275
