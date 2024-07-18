@@ -11,7 +11,7 @@ import argparse
 import tqdm
 
 # Please build the image first:
-# cd latex-online docker build -t logcreative/latex-online:latest .
+# cd latex-online && docker build -t logcreative/latex-online:latest .
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--compiler", type=str, choices=["pdflatex","xelatex"], default="pdflatex")
