@@ -9,3 +9,7 @@
 	path = latex-online
 	url = https://github.com/LogCreative/latex-online.git
 	branch = 2024
+[submodule "overleaf"]
+	path = overleaf
+	url = https://github.com/LogCreative/overleaf.git
+	branch = benchmark
