@@ -1,0 +1,23 @@
+\documentclass[tikz,convert={outext=.png}]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepackage{pgfplotstable}
+\usetikzlibrary{backgrounds}
+\begin{document}
+\begin{tikzpicture}[background rectangle/.style={fill=white},show background rectangle]
+\begin{axis}[xmin={0},
+ymin={0},
+xmax={728},
+xlabel={Example Number},
+ylabel={Compilation Time (s)},
+legend pos={north west},
+const plot,
+]
+ \pgfplotstableread [col sep=comma,] {../merged_result_times.csv}{\result}
+ \addplot+ [no markers,fill=green,draw=none,] table[x=file,y=LaTeXOnline,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=red,draw=none,] table[x=file,y=PGFPlotsEdt,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=blue,draw=none,] table[x=file,y=PGFPlotsEdt-deploy,] {\result} \closedcycle;
+ \legend{LaTeXOnline,PGFPlotsEdt,PGFPlotsEdt-deploy,}
+\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -300,5 +300,7 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
+*.ps
+*.pdf
 latex_pgfplots_doctest/
 __pycache__/
