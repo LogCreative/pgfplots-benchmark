@@ -14,9 +14,9 @@ legend pos={north west},
 const plot,
 ]
  \pgfplotstableread [col sep=comma,] {../merged_result_times.csv}{\result}
- \addplot+ [no markers,fill=green,draw=none,] table[x=file,y=LaTeXOnline,] {\result} \closedcycle;
- \addplot+ [no markers,fill=red,draw=none,] table[x=file,y=PGFPlotsEdt,] {\result} \closedcycle;
- \addplot+ [no markers,fill=blue,draw=none,] table[x=file,y=PGFPlotsEdt-deploy,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=green,draw=green,thin] table[x=file,y=LaTeXOnline,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=red,draw=red,thin] table[x=file,y=PGFPlotsEdt,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=blue,draw=blue,thin] table[x=file,y=PGFPlotsEdt-deploy,] {\result} \closedcycle;
  \legend{LaTeXOnline,PGFPlotsEdt,PGFPlotsEdt-deploy,}
 \end{axis}
 \end{tikzpicture}
