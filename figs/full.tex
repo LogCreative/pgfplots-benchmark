@@ -15,9 +15,10 @@ const plot,
 ]
  \pgfplotstableread [col sep=comma,] {../merged_result_times.csv}{\result}
  \addplot+ [no markers,fill=green,draw=green,thin] table[x=file,y=LaTeXOnline,] {\result} \closedcycle;
- \addplot+ [no markers,fill=red,draw=red,thin] table[x=file,y=PGFPlotsEdt,] {\result} \closedcycle;
- \addplot+ [no markers,fill=blue,draw=blue,thin] table[x=file,y=PGFPlotsEdt-deploy,] {\result} \closedcycle;
- \legend{LaTeXOnline,PGFPlotsEdt,PGFPlotsEdt-deploy,}
+ \addplot+ [no markers,fill=red,draw=red,thin] table[x=file,y=Overleaf,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=blue,draw=blue,thin] table[x=file,y=PGFPlotsEdt,] {\result} \closedcycle;
+ \addplot+ [no markers,fill=black,draw=black,thin] table[x=file,y=PGFPlotsEdt-deploy,] {\result} \closedcycle;
+ \legend{LaTeXOnline,Overleaf,PGFPlotsEdt,PGFPlotsEdt-deploy,}
 \end{axis}
 \end{tikzpicture}
 \end{document}

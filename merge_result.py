@@ -6,10 +6,11 @@ def read_csv_result(csv_file, platform):
 
 result_ppedt = read_csv_result("ppedt_times.csv", "PGFPlotsEdt")
 result_ppedt_deploy = read_csv_result("ppedt_deploy_times.csv", "PGFPlotsEdt-deploy")
+result_overleaf = read_csv_result("overleaf_times.csv", "Overleaf")
 result_laton = read_csv_result("laton_times.csv", "LaTeXOnline")
 
 # Only keep the common successful files
-merged_result = pd.DataFrame([result_ppedt_deploy, result_ppedt, result_laton]).T
+merged_result = pd.DataFrame([result_ppedt_deploy, result_ppedt, result_overleaf, result_laton]).T
 
 # index column only keep the parsed number
 merged_result.index = merged_result.index.str.extract(r"(\d+)", expand=False).astype(int)
