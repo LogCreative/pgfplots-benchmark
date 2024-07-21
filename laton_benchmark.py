@@ -11,7 +11,7 @@ import argparse
 import tqdm
 
 # Please build the image first:
-# cd latex-online && docker build -t logcreative/latex-online:latest .
+# cd latex-online && docker build -t aslushnikov/latex-online:latest .
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--compiler", type=str, choices=["pdflatex","xelatex"], default="pdflatex")
@@ -27,8 +27,8 @@ server_id = subprocess.Popen(f"{sys.executable} file_server.py", stdout=subproce
 # Start LaTeX Online from docker
 print("Start LaTeX Online ...")
 client = docker.from_env()
-container = client.containers.run("logcreative/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
-# docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d logcreative/latex-online:latest
+container = client.containers.run("aslushnikov/latex-online:latest", detach=True, ports={'2700/tcp': 2700}, extra_hosts={"host.docker.internal": "host-gateway"})
+# docker run --add-host=host.docker.internal:host-gateway -p 2700:2700 -d aslushnikov/latex-online:latest
 
 # Wait for the server to start, git clone may slow for LaTeX Online
 print("Wait for the server to start (30s) ...")
